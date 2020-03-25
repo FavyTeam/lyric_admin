@@ -1,0 +1,128 @@
+<% include ./layouts/header.ejs %> <% include ./layouts/topnav.ejs %>
+<div class="main">
+  <div class="container body-container">
+    <div class="card col-md-8 offset-md-2">
+      <div class="card-body">
+        <% if(errors.length > 0) { %>
+        <div class="row mb-3">
+          <% errors.forEach(function(error){ %>
+          <div class="alert alert-danger col-md-12 alert-dismissible fade show" role="alert">
+            <strong>Error!</strong> <%= error %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <% }); %>
+        </div>
+        <% } %> <% if(success.length > 0) { %>
+        <div class="row mb-3">
+          <% success.forEach(function(success){ %>
+          <div class="alert alert-success col-md-12 alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> <%= success %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <% }); %>
+        </div>
+        <% } %>
+        <div class="row">
+          <div class="col-md-12">
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="eventtitle">Title</label>
+                    <small class="requiredLable" id="requiredLableBlockForTitle">*</small>
+                    <input
+                    type="text"
+                    class="form-control"
+                    id="eventtitle"
+                    name="event_title"
+                    value="<%= (form != null) ? form.event_title : '' %>"
+                    aria-describedby="requiredLableBlockForTitle"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="event_date">Event Date</label>
+                    <small class="requiredLable" id="requiredLableBlockForEventDate">*</small>
+                    <input
+                    readonly
+                    type="text"
+                    class="form-control datepicker"
+                    id="event_date"
+                    name="event_date"
+                    value="<%= (form != null) ? moment(form.event_date).format('YYYY-MM-DD') : '' %>"
+                    aria-describedby="requiredLableBlockForEventDate"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="Destination">Destination</label>
+                    <small class="requiredLable" id="requiredLableBlockForDestination">*</small>
+                    <input
+                    
+                    type="text"
+                    class="form-control "
+                    id="destination"
+                    name="destination"
+                    value="<%= (form != null) ? form.destination : '' %>"
+                    aria-describedby="requiredLableBlockForDestination"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="organized_by">Organized By</label>
+                    <small class="requiredLable" id="requiredLableBlockForOrganizedBy">*</small>
+                    <input
+                        type="text"
+                        class="form-control "
+                        id="organized_by"
+                        name="organized_by"
+                        value="<%= (form != null) ? form.organized_by : '' %>"
+                        aria-describedby="requiredLableBlockForOrganizedBy"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <small class="requiredLable" id="requiredLableBlockForCategory">*</small>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="category"
+                        name="category"
+                        value="<%= (form != null) ? form.category : '' %>"
+                        aria-describedby="requiredLableBlockForCategory"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="event_time">Time</label>
+                    <input type="text" class="form-control" id="event_time" name="event_time" value="<%= (form != null) ? form.event_time : '' %>" />
+                </div>
+                <div class="form-group">
+                    <div class="imagediv">
+                        <label for="eventImg">Image</label>
+                        <small class="requiredLable" id="requiredLableBlockForImg">*</small>
+                        <% if(form !=null && form.image) { %>
+                          <input type="hidden" name="image" value="<%= form.image %>" />
+                          <div class="col-4 showonhover"><img width="200px" id="selected-img"  height="200px" src="../../uploads/thumb/<%= form.image %>" /></div>
+                          <% } else { %>
+                            <div class="col-4 showonhover"><span>Choose Files </span></div>
+                        <% } %>
+                        <input id="selectfile" name="eventImg" type="file" style="display: none;" aria-describedby="requiredLableBlockForImg" />
+                      </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" rows="3" name="description"><%= (form != null) ? form.description : '' %></textarea>
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                </div>
+                <div style="text-align: center">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="/events/list" class="btn btn-dark">Cancel</a>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% include ./layouts/inner-footer.ejs %>
+</div>
+<% include ./layouts/footer.ejs %>

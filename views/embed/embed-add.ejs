@@ -1,0 +1,76 @@
+<% include ./layouts/header.ejs %> <% include ./layouts/topnav.ejs %>
+<div class="main">
+  <div class="container body-container">
+    <div class="card col-md-8 offset-md-2">
+      <div class="card-body">
+        <% if(errors.length > 0) { %>
+        <div class="row mb-3">
+          <% errors.forEach(function(error){ %>
+          <div class="alert alert-danger col-md-12 alert-dismissible fade show" role="alert">
+            <strong>Error!</strong> <%= error %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <% }); %>
+        </div>
+        <% } %> <% if(success.length > 0) { %>
+        <div class="row mb-3">
+          <% success.forEach(function(success){ %>
+          <div class="alert alert-success col-md-12 alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> <%= success %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <% }); %>
+        </div>
+        <% } %>
+        <div class="row">
+          <div class="col-md-12">
+            <form method="post" enctype="multipart/form-data">
+              <div class="form-group">
+                <label for="title">Title</label>
+                <small class="requiredLable" id="requiredLableBlockForTitle">*</small>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="title"
+                  name="title"
+                  value="<%= (form != null) ? form.title : '' %>"
+                  aria-describedby="requiredLableBlockForTitle"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="youtube_url">Youtube Link</label>
+                <input type="text" class="form-control" id="youtube_url" name="youtube_url" value="<%= (form != null) ? form.youtube_url : '' %>" />
+              </div>
+              <div class="form-group">
+                <div class="imagediv">
+                  <label for="embedImg">Image</label>
+                  <small class="requiredLable" id="requiredLableBlockForEmbedImg">*</small>
+                  <% if(form !=null && form.image) { %>
+                  <input type="hidden" name="image" value="<%= form.image %>" />
+                  <div class="col-4 showonhover">
+                    <img width="200px" id="selected-img" height="200px" src="../../uploads/thumb/<%= form.image %>" />
+                  </div>
+                  <% } else { %>
+                  <div class="col-4 showonhover"><span>Choose Files </span></div>
+                  <% } %>
+                </div>
+              </div>
+               <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <div style="text-align: center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="/embed/list" class="btn btn-dark">Cancel</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% include ./layouts/inner-footer.ejs %>
+</div>
+<% include ./layouts/footer.ejs %>

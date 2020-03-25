@@ -1,0 +1,121 @@
+<% include ./layouts/header.ejs %> <% include ./layouts/topnav.ejs %>
+<div class="main">
+  <div class="container body-container">
+    <div class="card col-md-8 offset-md-2">
+      <div class="card-body">
+        <% if(errors.length > 0) { %>
+        <div class="row mb-3">
+          <% errors.forEach(function(error){ %>
+          <div class="alert alert-danger col-md-12 alert-dismissible fade show" role="alert">
+            <strong>Error!</strong> <%= error %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <% }); %>
+        </div>
+        <% } %> <% if(success.length > 0) { %>
+        <div class="row mb-3">
+          <% success.forEach(function(success){ %>
+          <div class="alert alert-success col-md-12 alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> <%= success %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <% }); %>
+        </div>
+        <% } %>
+        <div class="row">
+          <div class="col-md-12">
+            <form method="post" enctype="multipart/form-data">
+              <div class="form-group">
+                <label for="first_name">First Name</label>
+                <small class="requiredLable" id="requiredLableBlockForfirst_name">*</small>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="first_name"
+                  name="first_name"
+                  value="<%= (form != null) ? form.first_name : '' %>"
+                  aria-describedby="requiredLableBlockForfirst_name"
+                />
+              </div>
+              <div class="form-group">
+                <label for="last_name">last Name</label>
+                <small class="requiredLable" id="requiredLableBlockForlast_name">*</small>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="last_name"
+                  name="last_name"
+                  value="<%= (form != null) ? form.last_name : '' %>"
+                  aria-describedby="requiredLableBlockForlast_name"
+                />
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <small class="requiredLable" id="requiredLableBlockForEmail">*</small>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  value="<%= (form != null) ? form.email : '' %>"
+                  aria-describedby="requiredLableBlockForEmail"
+                />
+              </div>
+              <!-- <div class="form-group">
+                <label for="type">Type</label>
+                <small class="requiredLable" id="requiredLableBlockForType">*</small>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="type"
+                  name="type"
+                  value="<%= (form != null) ? form.type : '' %>"
+                  aria-describedby="requiredLableBlockForType"
+                />
+              </div> -->
+              <div class="form-group">
+                <label for="password">Password</label>
+                <small class="requiredLable" id="requiredLableBlockForPassword">*</small>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  name="password"
+                  value="<%= (form != null) ? form.password : '' %>"
+                  aria-describedby="requiredLableBlockForPassword"
+                />
+              </div>
+            
+              <div class="form-group">
+                <div class="imagediv">
+                    <label for="User_img">Image</label>
+                    <small class="requiredLable" id="requiredLableBlockForUserImg">*</small>
+                    <% if(form !=null && form.image) { %>
+                      <input type="hidden" name="image" value="<%= form.image %>" />
+                      <div class="col-4 showonhover"><img width="200px" id="selected-img"  height="200px" src="../../users_image/thumb/<%= form.image %>" /></div>
+                      <% } else { %>
+                        <div class="col-4 showonhover"><span>Choose Files </span></div>
+                    <% } %>
+                    <input id="selectfile" name="User_img" type="file" style="display: none;" aria-describedby="requiredLableBlockForUserImg" />
+                  </div>
+              </div>
+              <div class="form-group">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              </div>
+              <div style="text-align: center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="/user/list" class="btn btn-dark">Cancel</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% include ./layouts/inner-footer.ejs %>
+</div>
+<% include ./layouts/footer.ejs %>

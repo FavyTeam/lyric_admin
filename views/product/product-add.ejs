@@ -1,0 +1,119 @@
+<% include ./layouts/header.ejs %> <% include ./layouts/topnav.ejs %>
+<div class="main">
+  <div class="container body-container">
+    <div class="card col-md-8 offset-md-2">
+      <div class="card-body">
+        <% if(errors.length > 0) { %>
+        <div class="row mb-3">
+          <% errors.forEach(function(error){ %>
+          <div class="alert alert-danger col-md-12 alert-dismissible fade show" role="alert">
+            <strong>Error!</strong> <%= error %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <% }); %>
+        </div>
+        <% } %> <% if(success.length > 0) { %>
+        <div class="row mb-3">
+          <% success.forEach(function(success){ %>
+          <div class="alert alert-success col-md-12 alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> <%= success %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <% }); %>
+        </div>
+        <% } %>
+        <div class="row">
+          <div class="col-md-12">
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <small class="requiredLable" id="requiredLableBlockForTitle">*</small>
+                    <input
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    value="<%= (form != null) ? form.title : '' %>"
+                    aria-describedby="requiredLableBlockForTitle"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="price">Price</label>
+                    <small class="requiredLable" id="requiredLableBlockForPrice">*</small>
+                    <input
+                    type="text"
+                    class="form-control"
+                    id="price"
+                    name="price"
+                    value="<%= (form != null) ? form.price : '' %>"
+                    aria-describedby="requiredLableBlockForPrice"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="sizes">sizes</label>
+                    <ul>
+                        <li><span class="sizes-fields">S<small class="requiredLable" id="requiredLableBlockForImg">*</small>  </span><input type="text" class="form-control" id="sizes_s" name="sizes[0][s]" value="<%= (form != null) ? form.sizes[0].s : '' %>" placeholder="quantity" /> </li>
+                        <li><span class="sizes-fields">M<small class="requiredLable" id="requiredLableBlockForImg">*</small> </span><input type="text" class="form-control" id="sizes_m" name="sizes[1][m]" value="<%= (form != null) ? form.sizes[1].m : '' %>" placeholder="quantity" /></li>
+                        <li><span class="sizes-fields">L<small class="requiredLable" id="requiredLableBlockForImg">*</small>  </span><input type="text" class="form-control" id="sizes_l" name="sizes[2][l]" value="<%= (form != null) ? form.sizes[2].l : '' %>" placeholder="quantity" /></li>
+                        <li><span class="sizes-fields">XL<small class="requiredLable" id="requiredLableBlockForImg">*</small> </span><input type="text" class="form-control" id="sizes_xl" name="sizes[3][xl]" value="<%= (form != null) ? form.sizes[3].xl : '' %>" placeholder="quantity" /></li>
+                        <li><span class="sizes-fields">XXL<small class="requiredLable" id="requiredLableBlockForImg">*</small></span><input type="text" class="form-control" id="sizes_xxl" name="sizes[4][xxl]" value="<%= (form != null) ? form.sizes[4].xxl : '' %>" placeholder="quantity" /></li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" id="description" rows="3" name="description"><%= (form != null) ? form.description : '' %></textarea>
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                </div>                                                            
+                <div class="form-group">
+                    <label for="product_image">Images</label>
+                    <small class="requiredLable" id="requiredLableBlockForImg">*</small>
+                    <span class="glyphicon glyphicon-plus add_more_images float-right"></span>
+                    <%if (form != null && form.images) { %>
+                          <% form.images.forEach(function(image, img_index){ %> 
+                            <div class="product_images_files">
+                              <div class="product_image col-6">
+                                  <div class="col-4 productonhover">
+                                      <img class="profile-img-tag" img_index="<%= img_index%>" width="200px"  height="200px" src="./../../uploads/thumb/<%=image %>" />
+                                  </div>
+                                  <input class="upload_file" name="product_image" type="file" style="display: none;" aria-describedby="requiredLableBlockForImg" />
+                                  <input type="hidden" class="updated_images_array" name="updated_images[<%=img_index%>]" value="" />
+                                </div>
+                            </div>                            
+                          <% }) %>
+                          <div class="requiredLable" id="image_over_msg">You can't add more then 4 images.</div>
+                          <% } else { %>
+                              <div class="product_images_files">
+                                  <div class="product_image">
+                                      <div class="col-4 productonhover"><span>Choose Files </span></div>
+                                      <input class="upload_file" name="product_image" type="file" style="display: none;" aria-describedby="requiredLableBlockForImg" />
+                                  </div>
+                              </div>
+                              <div class="requiredLable" id="image_over_msg">You can't add more then 4 images.</div>
+                            <% } %>
+                        
+                        
+                    
+                </div>
+                
+                <div style="text-align: center">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="/product/list" class="btn btn-dark">Cancel</a>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% include ./layouts/inner-footer.ejs %>
+</div>
+<% include ./layouts/footer.ejs %>
+
+<script type="text/javascript">
+  
+
+</script>

@@ -1,0 +1,45 @@
+<% include ./layouts/header.ejs %>
+<div class="marketing body-container">
+  <form class="form-signin" method="post">
+    <div class="text-center mb-4">
+      <img src="/images/web-logo.png" />
+      <!-- <h1 class="h3 mb-3 font-weight-normal">Login</h1> -->
+    </div>
+
+    <div class="form-label-group">
+      <input type="text" name="email" id="inputEmail" value="<%= (form != null) ? form.email : "" %>" class="form-control" placeholder="email"
+      autofocus>
+      <label for="inputEmail">Email</label>
+    </div>
+
+    <div class="form-label-group">
+      <input type="password" name="password" id="inputPassword" value="<%= (form != null) ? form.password : "" %>" class="form-control"
+      placeholder="Password">
+      <label for="inputPassword">Password</label>
+    </div>
+
+    <%/*
+    <div class="checkbox mb-3">
+      <label> <input type="checkbox" value="remember-me" /> Remember me </label>
+    </div>
+    */%>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+    <button class="btn btn-lg btn-primary btn-block" type="submit">
+      Sign in
+    </button>
+
+    <% if(errors.length > 0) { %>
+    <div class="row mt-5 mb-3">
+      <% errors.forEach(function(error){ %>
+      <div class="alert alert-danger col-md-12 alert-dismissible fade show" role="alert">
+        <strong>Error!</strong> <%= error %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <% }); %>
+    </div>
+    <% } %>
+  </form>
+</div>
+<% include ./layouts/footer.ejs %>
