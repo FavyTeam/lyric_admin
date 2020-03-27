@@ -15,7 +15,9 @@ router.get("/logout", csrfProtection, auth.isLoggedIn, Login.logout);
 
 router.get("/reset-password/:token", csrfProtection, Login.resetPassword).post("/reset-password/:token", csrfProtection, Login.updatePassword);
 
-router.get("/thank-you", csrfProtection, Login.thankYou);
+router.get("/thank-you", Login.thankYou);
+// router.get("/thank-you", csrfProtection, Login.thankYou);
+
 
 
 module.exports = router;

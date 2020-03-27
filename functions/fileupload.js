@@ -4,7 +4,7 @@
  */
 
 exports.fileFilterFunc = function(req, file, cb) {
-  console.log('Files: ', file);
+  //console.log('Files: ', file);
   var allowFileFormats = ["image/jpeg", "image/jpg", "image/png"];
   if (allowFileFormats.indexOf(file.mimetype) == -1) {
     // You can always pass an error if something goes wrong:

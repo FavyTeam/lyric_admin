@@ -1,0 +1,13 @@
+{
+  "MONGO_URL": "mongodb://localhost:27017/e-commerce",
+  "JWT_SECRET": "IamTheLyrical",
+  "PORT": 4200,
+  "EMAIL_SMTP_HOST": "",
+  "EMAIL_SMTP_PORT": "",
+  "EMAIL_SMTP_SECURE": "",
+  "EMAIL_SMTP_USERNAME": "",
+  "EMAIL_SMTP_PASSWORD": "",
+  "EMAIL_FROM": "info@example.com",
+  "STRIPE_KEY": "pk_test_xxxxxxxxxxxx",
+  "STRIPE_SECRET": "sk_test_xxxxxxxxxxxxxx"
+}

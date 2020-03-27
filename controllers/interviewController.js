@@ -6,6 +6,7 @@ var uuidV1 = require("uuid/v1");
 var jimp = require("jimp");
 var async = require("async");
 var moment = require("moment");
+var request = require('request');
 
 var Interview = require("../models/interview");
 
@@ -14,6 +15,45 @@ exports.index = function(req, res) {
 };
 
 exports.list = function(req, res) {
+  //  request('https://www.googleapis.com/youtube/v3/playlistItems?playlistId=PLfvpqdsXvlf5PDuQtD7q34IiW8elYLOBO&part=snippet,id&maxResults=50&key=AIzaSyDatqaJO9Q6EdeJXPJ7whIE1Kbya3AeFN8', function (error, response, body) {
+  //     if (!error && response.statusCode == 200) {
+  //       var tmp = JSON.parse(body);
+  //       var lists = tmp.items;
+  //       for (var i = 0 ; i <= lists.length - 1; i++) {
+  //           var item = lists[i];
+  //           const thumbnails = item.snippet.thumbnails;
+  //           const imageUrl = thumbnails.high.url;   
+  //           const videoId = item.snippet.resourceId.videoId;
+  //           const playlistId = item.snippet.playlistId;
+  //           const releasedAt = item.snippet.publishedAt;
+  //           var title = item.snippet.title;
+  //           title = title.split(" | ");
+
+  //           interviewer_name = title[0];
+  //           interview_title = title[1];
+
+  //           const description = item.snippet.description;  
+  //           var videoTitle = title;
+  //           var author = "";
+            
+  //           var interview = new Interview();
+  //           interview.title = interview_title;
+  //           interview.interviewer_name = interviewer_name;
+  //           interview.interview_release = releasedAt;
+  //           interview.youtube_url = videoId;
+  //           interview.image = imageUrl;
+  //           interview.description = description;
+
+  //           interview.save((err, result) => {
+  //             // if (err) {
+  //             //   callback(err); // call final function
+  //             // }
+  //             callback(err); // call final function
+  //           });
+  //        } 
+  //      }
+  // })
+
   try {
     var errMsg = req.flash("error");
     var successMsg = req.flash("success");

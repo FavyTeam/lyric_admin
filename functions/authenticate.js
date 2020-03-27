@@ -37,8 +37,8 @@ exports.verifyToken = function(req, res, next) {
 exports.generateJwtToken = function(payloadData, callback) {
   const payload = payloadData;
   var token = jwt.sign(payload, process.env.JWT_SECRET, {
-     //expiresIn: false // 1 hours
-    expiresIn:   60 * 60 * 24 * 365 * 10 // expires in 10 years
+     expiresIn: "1h" // 1 hours
+     // expiresIn:   // 60 * 60 * 24 * 365 * 10 // expires in 10 years
     // expiresIn: 60 // expires in 1 minute
   });
   callback(false, token);

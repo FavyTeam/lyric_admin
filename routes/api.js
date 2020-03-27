@@ -22,6 +22,7 @@ var Payment = require("../api/controllers/paymentController");
 var User = require("../api/controllers/userController");
 var Categories = require("../controllers/filterCategories");
 var Embed = require("../api/controllers/embedController");
+var LL2 = require("../api/controllers/ll2Controller");
 
 // Login
 router.post("/signup", Login.signup);
@@ -31,13 +32,15 @@ router.post("/updateProfileImage", authenticate.verifyToken, upload, Login.updat
 router.post("/forgot-password", Login.forgotPassword);
 router.post("/deleteProfileImage", authenticate.verifyToken, Login.deleteProfileImage);
 // Music
-router.get("/get_musics", authenticate.verifyToken, upload, Music.getAllMusic);
+router.get("/get_musics", Music.getAllMusic);
 // Interview
-router.get("/get_interviews", authenticate.verifyToken, Interview.getAllInterview);
+router.get("/get_interviews", Interview.getAllInterview);
 // Events
 router.get("/get_events", authenticate.verifyToken, Events.getAllEvents);
 //Embed
 router.get("/get_embeds", authenticate.verifyToken, upload, Embed.getAllEmbedVideos);
+//ll2
+router.get("/get_ll2", LL2.getAllLL2);
 
 // products
 router.get("/get_products", authenticate.verifyToken, Products.getAllProducts);

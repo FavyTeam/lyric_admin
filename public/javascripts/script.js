@@ -83,7 +83,7 @@ $(function() {
         data: null,
         render: function(data, type, row, meta) {
           let html = `
-          <a href="${row.youtube_url}" >${row.youtube_url}</a>
+          <a href="http://youtube.com/watch?v=${row.youtube_url}" >${row.youtube_url}</a>
             `;
           return html;
         }
@@ -249,7 +249,7 @@ $(function() {
         data: null,
         render: function(data, type, row, meta) {
           let html = `
-            <a href="${row.youtube_url}" >${row.youtube_url}</a>
+            <a href="http://youtube.com/watch?v=${row.youtube_url}" >${row.youtube_url}</a>
             `;
           return html;
         }
@@ -300,6 +300,98 @@ $(function() {
       }
     });
   });
+
+
+
+  $("#ll2List").DataTable({
+    aLengthMenu: [
+      [5, 10, 25, 50, 100],
+      [5, 10, 25, 50, 100]
+    ],
+    iDisplayLength: 5,
+    // processing: true,
+    serverSide: true,
+    ajax: {
+      url: "/ll2/ajax/list",
+      type: "POST"
+    },
+    columns: [
+      { data: "title" },
+      { data: "singer" },
+      { bSortable: false, data: "youtube_url" },
+      { data: "music_release" },
+      { bSortable: false, data: "description" }
+    ],
+    columnDefs: [
+      {
+        targets: 5,
+        data: null,
+        render: function(data, type, row, meta) {
+          let html = `
+            <a href="/ll2/edit/${row.id}" class="btn btn-success btn-sm margin_bt">Edit</a> <button class="btn btn-danger btn-sm deleteLL2s margin_bt"  data-id="${row.id}" >Delete</button>
+            `;
+          return html;
+        }
+      },
+      {
+        targets: 2,
+        data: null,
+        render: function(data, type, row, meta) {
+          let html = `
+            <a href="http://youtube.com/watch?v=${row.youtube_url}" >${row.youtube_url}</a>
+            `;
+          return html;
+        }
+      },
+      {
+        targets: 3,
+        data: null,
+        render: function(data, type, row, meta) {
+          let html = moment(row.ll2_release).format("YYYY-MM-DD");
+          return html;
+        }
+      },
+      { orderable: false, searchable: false, targets: -1 }
+    ],
+    fnDrawCallback: function(oSettings) {
+      makeToggle();
+    }
+  });
+
+  $("#ll2List").on("click", ".deleteLL2s", function() {
+    var evt = $(this);
+    var id = $(this).attr("data-id");
+    var ll2table = $("#ll2List").DataTable();
+    $.ajax({
+      type: "post",
+      url: "/ll2/delete/" + id,
+      success: function(response) {
+        ll2table
+          .row(evt.parents("tr"))
+          .remove()
+          .draw();
+      },
+      error: function(status) {
+        var html = `
+          <div class="row mb-3 aj-err">
+          <div class="alert alert-danger col-md-12 alert-dismissible fade show" role="alert">
+            <strong>Error!</strong> There is something went wrong when perform this action. Please refresh this page and try again.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
+          `;
+        $(".card-body")
+          .find(".aj-err")
+          .remove();
+        $(".card-body").prepend(html);
+      }
+    });
+  });
+
+  
+
 
   $("#userList").on("click", ".deleteUser", function() {
     var evt = $(this);

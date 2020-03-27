@@ -6,94 +6,25 @@ var uuidV1 = require("uuid/v1");
 var jimp = require("jimp");
 var moment = require("moment");
 var async = require("async");
-const https = require('https');
 var request = require('request');
 
-var Music = require("../models/music");
+var LL2 = require("../models/ll2");
 
 exports.index = function(req, res) {
-  res.redirect("/music/list");
+  res.redirect("/ll2/list");
 };
 
-exports.list = async function(req, res) {
-  // request('https://www.googleapis.com/youtube/v3/playlistItems?playlistId=PLfvpqdsXvlf4vqsRWglvSPplpKkEsBI7E&part=snippet,id&maxResults=50&key=AIzaSyDatqaJO9Q6EdeJXPJ7whIE1Kbya3AeFN8', function (error, response, body) {
-  //     if (!error && response.statusCode == 200) {
-  //       var tmp = JSON.parse(body);
-  //       var lists = tmp.items;
-  //       for (var i = 0 ; i <= lists.length - 1; i++) {
-  //           var item = lists[i];
-  //           const thumbnails = item.snippet.thumbnails;
-  //           const imageUrl = thumbnails.high.url;    
-  //           const videoId = item.snippet.resourceId.videoId;
-  //           const playlistId = item.snippet.playlistId;
-  //           const releasedAt = item.snippet.publishedAt;
-  //           const title = item.snippet.title;
-  //           const description = item.snippet.description;
-  //           const position = item.snippet.position;
-  //           var titleArr = title.split('(');
-  //           var videoTitle = titleArr[0];
-  //           var tmpArr1 = titleArr[1];
-
-  //           if(tmpArr1 == 'undefined' || tmpArr1.length > 1) {
-  //               var tmpArr2 = tmpArr1.split('@_');
-  //           }
-  //           if(tmpArr2.length > 1){
-  //               var tmpArr3 = tmpArr2[1].split('_');
-  //               var author = tmpArr3[0];
-  //           }else{
-  //               var author = '';
-  //           }
-            
-  //           var music = new Music();
-  //           music.title = title;
-  //           music.singer = author;
-  //           music.music_release = releasedAt;
-  //           music.youtube_url = videoId;
-  //           music.position = position;
-  //           music.description = description;
-  //           music.image = imageUrl;
-
-  //           music.save((err, result) => {
-  //             try {
-  //               if (err) {
-  //                 throw err;
-  //               }
-  //             } catch (Err) {
-                
-  //             }
-  //           });
-  //        } 
-  //      }
-  // })
-
-  
-  // music.title = title;
-  // music.singer = singer;
-  // music.music_release = releaseDate;
-  // music.youtube_url = youtubeURL;
-  // music.position = position;
-  // music.description = description;
-  // music.save((err, result) => {
-  //   try {
-  //     if (err) {
-  //       throw err;
-  //     }
-      
-  //   } catch (Err) {
-      
-  //   }
-  // });
-
+exports.list = function(req, res) {
   try {
     var errMsg = req.flash("error");
     var successMsg = req.flash("success");
 
     var data = {
-      title: "Music List",
+      title: "LL2 List",
       errors: errMsg,
       success: successMsg
     };
-    res.render("music-list", data);
+    res.render("ll2-list", data);
   } catch (Err) {
     req.flash("error", Err.message || Err);
     return res.redirect("/dashboard");
@@ -107,7 +38,7 @@ exports.add = function(req, res) {
     var form = req.flash("form")[0] || null;
 
     var data = {
-      title: "Add New Music Video",
+      title: "Add New LL2 Video",
       errors: errMsg,
       success: successMsg,
       form,
@@ -115,17 +46,17 @@ exports.add = function(req, res) {
       csrfToken: req.csrfToken(),
       moment: moment
     };
-    res.render("music-add", data);
+    res.render("ll2-add", data);
   } catch (Err) {
     req.flash("error", Err.message || Err);
-    return res.redirect("/music/add");
+    return res.redirect("/ll2/add");
   }
 };
 
 exports.save = function(req, res) {
-   try {
+  try {
     req.checkBody("title", "Title is required").notEmpty();
-    req.checkBody("singer", "Singer name is required").notEmpty();
+    // req.checkBody("singer", "Singer name is required").notEmpty();
     req.checkBody("youtube_url", "youtube Url is required ");
 
     var errors = req.validationErrors();
@@ -137,7 +68,7 @@ exports.save = function(req, res) {
       });
 
       if (!req.file) {
-        messages.push("Please upload music video image.");
+        messages.push("Please upload ll2 video image.");
       }
 
       throw messages;
@@ -148,40 +79,38 @@ exports.save = function(req, res) {
     // }
 
     var title = sanitize(req.body.title.trim());
-    var singer = sanitize(req.body.singer.trim());
-    var releaseDate = sanitize(req.body.music_release.trim());
+    // var singer = sanitize(req.body.singer.trim());
+    var releaseDate = sanitize(req.body.ll2_release.trim());
     var youtubeURL = sanitize(req.body.youtube_url.trim());
-    var position = sanitize(req.body.position.trim());
+    // var position = sanitize(req.body.position.trim());
     var description = sanitize(req.body.description.trim());
     var file = req.file;
 
     if (!file) {
-      var music = new Music();
-      music.title = title;
-      music.singer = singer;
-      music.music_release = releaseDate;
-      music.youtube_url = youtubeURL;
-      music.position = position;
-      music.description = description;
-      music.save((err, result) => {
+      var ll2 = new LL2();
+      ll2.title = title;
+      // ll2.singer = singer;
+      ll2.ll2_release = releaseDate;
+      ll2.youtube_url = youtubeURL;
+      // ll2.position = position;
+      ll2.description = description;
+      ll2.save((err, result) => {
         try {
           if (err) {
             throw err;
           }
-          req.flash("success", "New music added successfully!");
-          return res.redirect("/music/list");
+          req.flash("success", "New ll2 added successfully!");
+          return res.redirect("/ll2/list");
         } catch (Err) {
           req.flash("form", req.body);
           req.flash("error", Err.message || Err);
-          return res.redirect("/music/add");
+          return res.redirect("/ll2/add");
         }
       });
     } else {
       var generateNewName = uuidV1();
       var fileExt = path.extname(file.originalname);
       var newFileName = generateNewName + fileExt;
-      // var newFile = "public/uploads/" + newFileName;
-      // var thumbnailFile = "public/uploads/thumb/" + newFileName;
       var newFile = "public/uploads/" + newFileName;
       var thumbnailFile = "public/uploads/thumb/" + newFileName;
 
@@ -193,38 +122,38 @@ exports.save = function(req, res) {
             .resize(250, jimp.AUTO) // resize
             .write(thumbnailFile); // save
 
-          var music = new Music();
-          music.title = title;
-          music.singer = singer;
-          music.music_release = releaseDate;
-          music.youtube_url = youtubeURL;
-          music.image = newFileName;
-          music.position = position;
-          music.description = description;
-          music.save((err, result) => {
+          var ll2 = new LL2();
+          ll2.title = title;
+          // ll2.singer = singer;
+          ll2.ll2_release = releaseDate;
+          ll2.youtube_url = youtubeURL;
+          ll2.image = newFileName;
+          // ll2.position = position;
+          ll2.description = description;
+          ll2.save((err, result) => {
             try {
               if (err) {
                 throw err;
               }
-              req.flash("success", "New music added successfully!");
-              return res.redirect("/music/list");
+              req.flash("success", "New ll2 added successfully!");
+              return res.redirect("/ll2/list");
             } catch (Err) {
               req.flash("form", req.body);
               req.flash("error", Err.message || Err);
-              return res.redirect("/music/add");
+              return res.redirect("/ll2/add");
             }
           });
         })
         .catch(Err => {
           req.flash("form", req.body);
           req.flash("error", Err.message || Err);
-          return res.redirect("/music/add");
+          return res.redirect("/ll2/add");
         });
     }
   } catch (Err) {
     req.flash("form", req.body);
     req.flash("error", Err.message || Err);
-    return res.redirect("/music/add");
+    return res.redirect("/ll2/add");
   }
 };
 
@@ -236,7 +165,7 @@ exports.delete = function(req, res) {
     async.waterfall(
       [
         function(callback) {
-          Music.findById(req.params.id, { image: 1 })
+          LL2.findById(req.params.id, { image: 1 })
             .then(result => {
               const old_filepath = `public/uploads/${result.image}`;
               const old_thumbpath = `public/uploads/thumb/${result.image}`;
@@ -255,7 +184,7 @@ exports.delete = function(req, res) {
             });
         },
         function(callback) {
-          Music.deleteOne({ _id: req.params.id })
+          LL2.deleteOne({ _id: req.params.id })
             .then(result => {
               callback(null, result);
             })
@@ -292,19 +221,19 @@ exports.edit = function(req, res) {
     if (!req.params.id || req.params.id == "") {
       throw new Error("Invalid request.");
     }
-    Music.find({ _id: req.params.id })
+    LL2.find({ _id: req.params.id })
       .then(result => {
         var errMsg = req.flash("error");
         var successMsg = req.flash("success");
         var data = {
-          title: "Edit Music Video",
+          title: "Edit LL2 Video",
           errors: errMsg,
           success: successMsg,
           form: result[0],
           csrfToken: req.csrfToken(),
           moment: moment
         };
-        return res.render("music-add", data);
+        return res.render("ll2-add", data);
       })
       .catch(err => {
         return res.status(400).json({
@@ -314,7 +243,7 @@ exports.edit = function(req, res) {
       });
   } catch (Err) {
     req.flash("error", Err.message || Err);
-    return res.redirect("/music/edit/" + req.params.id);
+    return res.redirect("/ll2/edit/" + req.params.id);
   }
 };
 
@@ -330,7 +259,7 @@ exports.update = function(req, res) {
               throw new Error("Invalid request.");
             }
             req.checkBody("title", "Title is required").notEmpty();
-            req.checkBody("singer", "Singer name is required").notEmpty();
+            // req.checkBody("singer", "Singer name is required").notEmpty();
             req.checkBody("youtube_url", "youtube Url is required ");
             var errors = req.validationErrors();
             if (errors && errors.length) {
@@ -389,7 +318,7 @@ exports.update = function(req, res) {
         },
         function(callback) {
           // function 3
-          Music.findByIdAndUpdate(_id, req.body, { new: true }, function(err, model) {
+          LL2.findByIdAndUpdate(_id, req.body, { new: true }, function(err, model) {
             if (err) {
               if (err.code && err.code === 11000) {
                 callback(err.errmsg); // call final function
@@ -404,20 +333,20 @@ exports.update = function(req, res) {
         if (err) {
           req.flash("form", req.body);
           req.flash("error", err.message || err);
-          return res.redirect(`/music/list`);
+          return res.redirect(`/ll2/list`);
         }
-        req.flash("success", "music update successfully!");
-        return res.redirect(`/music/list`);
+        req.flash("success", "ll2 update successfully!");
+        return res.redirect(`/ll2/list`);
       }
     );
   } catch (err) {
     req.flash("form", req.body);
     req.flash("error", err.message || err);
-    return res.redirect(`/music/list`);
+    return res.redirect(`/ll2/list`);
   }
 };
 
-exports.ajaxMusicList = function(req, res) {
+exports.ajaxLL2List = function(req, res) {
   try {
     const limit = parseInt(req.body.length);
     const skip = parseInt(req.body.start);
@@ -437,14 +366,11 @@ exports.ajaxMusicList = function(req, res) {
           title: { $regex: req.body["search[value]"], $options: "ig" }
         },
         {
-          singer: { $regex: req.body["search[value]"], $options: "ig" }
-        },
-        {
-          music_release: { $regex: req.body["search[value]"], $options: "ig" }
+          ll2_release: { $regex: req.body["search[value]"], $options: "ig" }
         }
       ];
     }
-    Music.aggregate()
+    LL2.aggregate()
       //.match({ type: "user" })
       .facet({
         stage1: [{ $group: { _id: null, count: { $sum: 1 } } }],

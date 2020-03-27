@@ -16,6 +16,7 @@ var indexRouter = require("./routes/index");
 var dashboardRouter = require("./routes/dashboard");
 var usersRouter = require("./routes/users");
 var musicRouter = require("./routes/music");
+var ll2Router = require("./routes/ll2");
 var interviewRouter = require("./routes/interview");
 var eventsRouter = require("./routes/events");
 var apiRouter = require("./routes/api");
@@ -36,6 +37,7 @@ app.set("views", [
   path.join(__dirname, "views/user/"),
   path.join(__dirname, "views/interview/"),
   path.join(__dirname, "views/music/"),
+  path.join(__dirname, "views/ll2/"),
   path.join(__dirname, "views/event/"),
   path.join(__dirname, "views/embed/"),
   path.join(__dirname, "views/product/"),
@@ -75,6 +77,7 @@ app.use("/", indexRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/user", usersRouter);
 app.use("/music", musicRouter);
+app.use("/ll2", ll2Router);
 app.use("/interview", interviewRouter);
 app.use("/events", eventsRouter);
 app.use("/api", apiRouter);
